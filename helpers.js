@@ -16,9 +16,9 @@ const generateTOTP = (secret) => {
     return code;
 }
 
-const generateUniqueCode = () => {
+const generateUniqueCode = (length) => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const codeLength = 10;
+    const codeLength = length;
     let uniqueCode = '';
 
     for (let i = 0; i < codeLength; i++) {
@@ -32,8 +32,11 @@ const generateUniqueCode = () => {
 
 const generateMessage = (number) => {
     let token = generateTOTP(number);
-    let uniqueCode = generateUniqueCode();
+    let uniqueCode = generateUniqueCode(10);
+    let uniqueCode2 = generateUniqueCode(20);
     const currentDate = new Date().toLocaleString('en-US', { timeZone: 'Asia/Makassar' });
+    const message = `Berich Elite - Kode ${token}\nJangan Berikan Kode Ini Kepada Siapapun.*\n📱${uniqueCode2}\n
+    \n✉️ Balas *Ya* apabila pesan sudah anda diterima ✉️\n [${currentDate}] 📱${uniqueCode}`;
     return message;
 }
 

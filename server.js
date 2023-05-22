@@ -8,7 +8,7 @@ const server = express();
 server.use(cors())
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-const port = 8000;
+const port = 8080;
 
 
 const {
@@ -74,19 +74,25 @@ server.get('/check-number/:number', async (req, res) => {
     try {
         if (!isRegistered) {
             return res.status(422).json({
+                code: 422,
+                message: 'Nomor belum terdaftar di WhatsApp',
                 status: true,
-                message: 'Nomor belum terdaftar di WhatsApp'
+                data: null
             });
         }
 
         return res.status(200).json({
+            code: 200,
+            message: 'Nomor sudah terdaftar di WhatsApp',
             status: true,
-            message: 'Nomor sudah terdaftar di WhatsApp'
+            data: null
         });
     } catch (err) {
         return res.status(500).json({
+            code: 500,
+            message: err.message || 'Internal server error',
             status: false,
-            message: err.message || 'Internal server error'
+            data: null
         });
     }
 });
@@ -98,20 +104,26 @@ server.post('/api/send-totp/:number', async (req, res) => {
     try {
         if (!isRegistered) {
             return res.status(422).json({
+                code: 422,
                 status: true,
-                message: 'Nomor belum terdaftar di WhatsApp'
+                message: 'Nomor belum terdaftar di WhatsApp',
+                data: null
             });
         }
 
         await client.sendMessage(number, message);
         return res.status(200).json({
+            code: 200,
             status: true,
-            message: 'Kode TOTP berhasil dikirim'
+            message: 'Kode TOTP berhasil dikirim',
+            data: null
         });
     } catch (err) {
         return res.status(500).json({
+            code: 500,
             status: false,
-            message: err.message || 'Internal server error'
+            message: err.message || 'Internal server error',
+            data: null
         });
     }
 })
